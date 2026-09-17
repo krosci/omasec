@@ -20,3 +20,6 @@ The hook maps Omarchy desktop themes to specific Yaru icon palette variants. The
 
 ## GSettings Propagation
 Icon theme changes are applied directly to the GNOME desktop interface schema by invoking `gsettings set org.gnome.desktop.interface icon-theme "Yaru-<color>"` within the active user session.
+
+## Micro Editor Theme Synchronization
+Micro editor colorscheme generation and synchronization is managed by `hooks/theme-set.d/micro-theme`. The hook reads active palette definitions from `/usr/share/omarchy/themes/<theme>/colors.toml`, generates custom `.micro` colorscheme files inside `~/.config/micro/colorschemes/omarchy.micro` (and `omarchy-<theme>.micro`), and updates `~/.config/micro/settings.json` with `"colorscheme": "omarchy"` seamlessly upon theme switching.

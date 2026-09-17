@@ -29,6 +29,8 @@ TEST_FILES=(
     "$SCRIPT_DIR/test_firewall_network.sh"
     "$SCRIPT_DIR/test_debloat_theming.sh"
     "$SCRIPT_DIR/test_security_tooling.sh"
+    "$SCRIPT_DIR/test_hardware_power.sh"
+    "$SCRIPT_DIR/test_modular_pipeline.sh"
     "$SCRIPT_DIR/test_idempotency_safety.sh"
 )
 

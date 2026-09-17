@@ -137,6 +137,15 @@ check "voxtype daemon inactive if missing" "! systemctl --user is-active voxtype
 check "foot launcher clean when missing" "! command -v foot &>/dev/null && ! [[ -f \$HOME/.local/share/applications/foot.desktop ]]"
 check "default webapps removed" "! grep -rlE 'omarchy-(launch-webapp|webapp-handler)' /usr/share/omarchy/applications 2>/dev/null"
 
+section "Hardware & Power Management"
+check "power.conf policy exists" "[[ -f /etc/omasec/power.conf ]]"
+check "battery charge udev rule exists" "[[ -f /etc/udev/rules.d/98-battery-charge-threshold.rules ]]"
+check "battery charge tmpfiles exists" "[[ -f /etc/tmpfiles.d/battery-charge-threshold.conf ]]"
+check "battery service enabled" "systemctl is-enabled battery-charge-threshold.service &>/dev/null"
+if ls /sys/class/power_supply/BAT*/charge_control_end_threshold &>/dev/null; then
+    check "live battery limit is 75%" "grep -qx '75' /sys/class/power_supply/BAT*/charge_control_end_threshold 2>/dev/null"
+fi
+
 section "Scheduling"
 check "weekly security audit" "[[ -f /etc/cron.weekly/security-audit.sh && -x /etc/cron.weekly/security-audit.sh ]]"
 
@@ -150,6 +159,8 @@ check "IgnorePkg in pacman.conf" "grep -q '^IgnorePkg' /etc/pacman.conf"
 check "icon-theme is Yaru"       "gsettings get org.gnome.desktop.interface icon-theme 2>/dev/null | grep -q 'Yaru'"
 check "no Tela override"         "! grep -rq 'Tela' $HOME/.config/omarchy/themes/ 2>/dev/null"
 check "folder-color hook"        "[[ -x $HOME/.config/omarchy/hooks/theme-set.d/folder-color ]]"
+check "micro-theme hook"         "[[ -x $HOME/.config/omarchy/hooks/theme-set.d/micro-theme ]]"
+check "micro colorscheme exists" "[[ -f $HOME/.config/micro/colorschemes/omarchy.micro ]]"
 check "yaru-icon-theme present"  "pacman -Q yaru-icon-theme &>/dev/null"
 
 section "AUR integrity"

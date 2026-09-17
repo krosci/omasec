@@ -50,6 +50,10 @@ HOOK_FILE="$PROJECT_DIR/hooks/theme-set.d/folder-color"
 check "folder-color hook exists" "[[ -f '$HOOK_FILE' ]]"
 check "folder-color hook is executable" "[[ -x '$HOOK_FILE' ]]"
 
+MICRO_HOOK="$PROJECT_DIR/hooks/theme-set.d/micro-theme"
+check "micro-theme hook exists" "[[ -f '$MICRO_HOOK' ]]"
+check "micro-theme hook is executable" "[[ -x '$MICRO_HOOK' ]]"
+
 test_theme_mapping() {
     local theme="$1" expected="$2"
     local mapped
