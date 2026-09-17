@@ -1,0 +1,22 @@
+[
+    {
+        "key": "ctrl+shift+p",
+        "command": "command palette",
+        "when": "!editorReadOnly"
+    },
+    {
+        "key": "ctrl+shift+m",
+        "command": "toggle markdown preview",
+        "when": "markdownPreview && !editorReadOnly"
+    },
+    {
+        "key": "ctrl+shift+e",
+        "command": "focus editor",
+        "when": "editorFocus"
+    },
+    {
+        "key": "ctrl+b",
+        "command": "focus side bar",
+        "when": "sideBarFocus"
+    }
+]
