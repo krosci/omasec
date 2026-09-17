@@ -7,23 +7,13 @@ description: >-
 # System Debloat Cleanup
 
 ## Overview
-This skill outlines how to remove default webapp launchers, uninstall bloat packages, and prevent their automatic reinstallation.
+This skill outlines how to remove default web application launchers, uninstall unwanted packages, and prevent their automatic reinstallation on Arch Linux Omarchy installations.
 
-## Debloat Procedures
+## Desktop Launcher Cleanup
+Web application desktop shortcuts installed under `/usr/share/omarchy/applications` and user desktop menus are cleaned by removing launcher definitions for Basecamp, Google Contacts, Google Maps, Google Messages, Google Photos, Discord, HEY, WhatsApp, X, YouTube, and Zoom.
 
-### Desktop Launcher Removal
-Remove web application launchers from `/usr/share/omarchy/applications` and user desktop menus:
-* Discord
-* WhatsApp
-* YouTube
-* X / Twitter
-* Google suite
-* HEY
-* Zoom
+## Package Removal and Replacement
+Unneeded software packages including Chromium, Neovim, omarchy-nvim, MPV, Kdenlive, OBS Studio, LibreOffice, and Obsidian are cleanly removed from the package database. Lightweight native defaults including Brave Origin, Micro, Totem, Yaru icon theme, Nautilus, Herdr, and Gum are retained and configured.
 
-### Package Cleanups
-* Unwanted packages removed: `chromium`, `neovim`, `omarchy-nvim`, `mpv`, `kdenlive`, `obs-studio`, `libreoffice-fresh`, `obsidian`.
-* Required packages installed: `brave-origin-bin`, `micro`, `totem`, `yaru-icon-theme`, `nautilus`, `herdr`, `gum`.
-
-### Pacman Pinning
-* Prevent removed packages from being re-pulled during system updates by appending them to `IgnorePkg` in `/etc/pacman.conf`.
+## Pacman Persistence
+To ensure removed packages are not pulled back into the system during subsequent system upgrades, package names are listed inside `/etc/pacman.d/omasec/ignore-pkgs.list` and pinned directly into `/etc/pacman.conf` within the `IgnorePkg` directive.

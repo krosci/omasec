@@ -9,44 +9,17 @@ description: >-
 ## Overview
 This skill provides instructions for applying and maintaining kernel parameters, firewall rules, memory protections, and PAM authentication policies on Arch Linux systems running Omarchy.
 
-## Kernel Hardening Parameters
-All kernel sysctl parameters are defined in `/etc/sysctl.d/99-security.conf`.
+## Kernel Hardening Configuration
+Kernel sysctl parameters are persisted in `/etc/sysctl.d/99-security.conf`. Memory protections enforce full Address Space Layout Randomization with `kernel.randomize_va_space = 2`, hide kernel pointers via `kernel.kptr_restrict = 2`, restrict dmesg buffer access to root using `kernel.dmesg_restrict = 1`, disable unprivileged performance events with `kernel.perf_event_paranoid = 3`, block unprivileged eBPF execution via `kernel.unprivileged_bpf_disabled = 1`, restrict ptrace debugging with `kernel.yama.ptrace_scope = 1`, and restrict SysRq to sync operations via `kernel.sysrq = 16`.
 
-### Memory and Process Restrictions
-* `kernel.randomize_va_space = 2` enables full Address Space Layout Randomization.
-* `kernel.kptr_restrict = 2` hides kernel pointers from unprivileged users.
-* `kernel.dmesg_restrict = 1` restricts dmesg buffer access to root.
-* `kernel.perf_event_paranoid = 3` disables unprivileged performance event monitoring.
-* `kernel.unprivileged_bpf_disabled = 1` disables unprivileged eBPF execution.
-* `kernel.yama.ptrace_scope = 1` restricts ptrace debugging to parent processes.
-* `kernel.sysrq = 16` limits SysRq to sync operations only.
+## Filesystem Protection
+Filesystem integrity settings prevent setuid core dumps with `fs.suid_dumpable = 0`, block hardlink attacks with `fs.protected_hardlinks = 1`, block symlink traversal attacks with `fs.protected_symlinks = 1`, and restrict FIFO and regular file creation in world-writable sticky directories using `fs.protected_fifos = 2` and `fs.protected_regular = 2`.
 
-### Filesystem Protection
-* `fs.suid_dumpable = 0` prevents core dumps from setuid programs.
-* `fs.protected_hardlinks = 1` prevents unprivileged hardlink creation attacks.
-* `fs.protected_symlinks = 1` prevents unprivileged symlink follow attacks.
-* `fs.protected_fifos = 2` restricts FIFO creation in world-writable sticky directories.
-* `fs.protected_regular = 2` restricts regular file creation in world-writable sticky directories.
+## Network Stack Protections
+Network protections enforce reverse path filtering with `net.ipv4.conf.all.rp_filter = 1`, reject ICMP redirects using `net.ipv4.conf.all.accept_redirects = 0` and `net.ipv4.conf.all.send_redirects = 0`, reject source routed packets with `net.ipv4.conf.all.accept_source_route = 0`, ignore ICMP broadcast echo requests using `net.ipv4.icmp_echo_ignore_broadcasts = 1`, enable TCP SYN cookies with `net.ipv4.tcp_syncookies = 1`, and prevent TIME-WAIT hazards using `net.ipv4.tcp_rfc1337 = 1`.
 
-### Network Stack Protections
-* `net.ipv4.conf.all.rp_filter = 1` enables reverse path filtering for anti-spoofing.
-* `net.ipv4.conf.all.accept_redirects = 0` disables ICMP redirect acceptance.
-* `net.ipv4.conf.all.send_redirects = 0` disables sending ICMP redirects.
-* `net.ipv4.conf.all.accept_source_route = 0` disables source-routed packets.
-* `net.ipv4.icmp_echo_ignore_broadcasts = 1` disables response to ICMP broadcast requests.
-* `net.ipv4.tcp_syncookies = 1` enables TCP SYN cookies protection against SYN floods.
-* `net.ipv4.tcp_rfc1337 = 1` protects against TCP TIME-WAIT assassination hazards.
-
-## Firewall Configuration
-UFW is configured with default deny incoming and allow outgoing policies.
-
-### Firewall Procedures
-1. Verify status using `ufw status verbose`.
-2. Ensure `ufw.service` is enabled at boot via `systemctl is-enabled ufw.service`.
-3. Check rules in `/etc/ufw/user.rules` and `/etc/ufw/after.rules`.
+## Firewall Management
+The UFW firewall operates with default deny incoming and default allow outgoing rules. Verification is executed using `ufw status verbose` and boot enablement is asserted via `systemctl is-enabled ufw.service`. Firewall rule definitions persist in `/etc/ufw/user.rules` and `/etc/ufw/after.rules`.
 
 ## PAM and Authentication
-1. `/etc/security/faillock.conf` enforces lockout after 5 consecutive failed attempts for 900 seconds.
-2. `/etc/security/pwquality.conf` enforces password complexity requirements.
-3. `/etc/security/access.conf` restricts access lists.
-4. `/etc/security/limits.d/99-no-core.conf` disables core dumps globally.
+Authentication policies enforce lockout after five consecutive failed attempts for 900 seconds in `/etc/security/faillock.conf`. Password complexity is mandated in `/etc/security/pwquality.conf`. User access control lists are defined in `/etc/security/access.conf` and core dump limits are disabled in `/etc/security/limits.d/99-no-core.conf`.

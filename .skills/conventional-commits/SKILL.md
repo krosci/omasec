@@ -7,21 +7,10 @@ description: >-
 # Conventional Commits
 
 ## Overview
-This skill defines commit message standards for the repository. All commits must follow the Conventional Commits specification.
+This skill defines commit message standards for the repository. All commits must strictly follow the Conventional Commits format to ensure consistent and parseable version control history.
 
-## Format Rules
-* Format: `<type>: <description>` or `<type>(<scope>): <description>`
-* The colon `:` after the target/type is the only allowed separator symbol.
-* Do not use emojis, exclamation marks, or extra punctuation characters in commit summaries.
-* Keep commit headers under 72 characters.
-* Use imperative mood in descriptions (e.g. `add`, `fix`, `update`, `remove`).
+## Formatting Rules
+Commit messages must follow the format `<type>: <description>` or `<type>(<scope>): <description>`. The colon `:` character directly following the target type is the only permitted punctuation symbol in the summary line. Emojis, exclamation marks, trailing periods, and non-alphanumeric decorators are strictly prohibited in commit titles. Commit summary lines must remain under 72 characters and use imperative verbs such as add, fix, update, remove, or refactor.
 
-## Allowed Types
-* `feat`: A new feature or capability.
-* `fix`: A bug fix.
-* `docs`: Documentation changes only.
-* `style`: Formatting changes that do not affect code logic.
-* `refactor`: Code changes that neither fix a bug nor add a feature.
-* `perf`: Performance improvements.
-* `test`: Adding or updating test suites.
-* `chore`: Maintenance, build tasks, and skill configurations.
+## Allowed Commit Types
+The `feat` type indicates a new feature or functionality. The `fix` type indicates a bug fix. The `docs` type indicates documentation updates. The `style` type indicates formatting adjustments without logic changes. The `refactor` type indicates code refactoring without feature addition or bug fixes. The `perf` type indicates performance enhancements. The `test` type indicates addition or correction of automated test suites. The `chore` type indicates maintenance, tooling, or build configuration adjustments.

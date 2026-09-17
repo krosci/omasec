@@ -3,58 +3,19 @@
 Arch Linux security hardening, debloat, and theming pipeline for Omarchy.
 
 ## Overview
-omasec automates system-level security hardening, deployment of security tooling, unneeded package debloating, and desktop theming integrations for Omarchy.
+omasec automates system-level security hardening, deployment of host-based intrusion prevention tooling, package debloating, and desktop theming integrations for the Omarchy desktop environment. The suite relies exclusively on native Bash scripts and standard Linux system utilities to guarantee predictable, idempotent execution.
 
-## Repository Structure
-* `scripts/`: System setup, verification, compatibility testing, and launch execution scripts.
-* `hooks/`: Omarchy hook extensions for theme and folder color integration.
-* `zedconf/`: Configuration files for the Zed code editor.
-* `.skills/`: Operational skill runbooks for workspace workflows.
-* `Makefile`: Workflow automation entrypoints.
-* `AGENTS.md`: Agent specifications and repository knowledge base.
-* `README.md`: Project documentation.
+## Repository Architecture
+The repository is structured into functional components located under dedicated paths. The `scripts/` directory contains root provisioning, verification, compatibility testing, and launcher scripts. The `hooks/` directory contains Omarchy desktop integration hooks for automatic icon and folder color switching. The `zedconf/` directory contains native configuration installers for the Zed editor. Operational runbooks reside in `.skills/` while project workflows are exposed through the `Makefile`. Root knowledge bases for automated agents are defined in `AGENTS.md` and `GEMINI.md`.
 
-## Quick Start
+## Execution Workflows
+System operations are executed through the standard Makefile targets. Running `make setup` initiates the full hardening and provisioning pipeline as root. Running `make verify` checks the system security posture against expected kernel, service, and package assertions. Running `make test` executes the Omarchy compatibility and desktop integrity test suite. Running `make hook` installs the desktop theme hook for the current user, while `make icons` forces an immediate color update for the active theme. Running `make clean` purges local execution logs.
 
-### Run Full Setup
-Execute the complete security hardening and provisioning pipeline as root:
-`make setup`
+## Security Posture and Kernel Protections
+Kernel security is enforced via `/etc/sysctl.d/99-security.conf` with full Address Space Layout Randomization, restricted kernel pointers, restricted dmesg buffers, disabled unprivileged eBPF execution, restricted ptrace debugging, and SysRq limited to emergency sync operations. Filesystem protection is hardened by disabling setuid core dumps and enforcing strict ownership checks on symlinks, hardlinks, FIFOs, and regular files in sticky directories. Network protections include reverse path filtering, disabled ICMP redirects, disabled source routing, ignore broadcast echo requests, and active TCP SYN cookies alongside RFC 1337 TIME-WAIT protections.
 
-### Verify System State
-Run the verification suite to assert that all security settings, services, and kernel parameters are correctly applied:
-`make verify`
+## Access Control and System Hardening
+Authentication security is enforced through PAM configuration in `/etc/security/faillock.conf` which locks accounts after five consecutive failed attempts for fifteen minutes. Password complexity is required via `pwquality.conf` and core dumps are disabled globally via limits configuration. SSH security is managed via drop-ins disabling root login and password authentication while enforcing modern ciphers. System services such as sshd are isolated using systemd unit drop-ins that mount system files read-only, hide home directories, and drop kernel privileges. The UFW firewall operates with default deny incoming and default allow outgoing rules. Host security tooling integrates AppArmor mandatory access control, auditd rule logging, fail2ban jail monitoring, USBGuard device authorization, ClamAV scanning, and weekly automated Lynis security audits.
 
-### Compatibility Testing
-Run the Omarchy integrity and compatibility test suite:
-`make test`
-
-### Desktop Theming
-Install and trigger the per-theme folder color hook for the current user:
-`make hook`
-`make icons`
-
-## Hardening Features
-
-### Firewall
-UFW configured with default deny incoming, strict egress policies, and container bridge rules.
-
-### Kernel Hardening
-ASLR, ptrace restriction, dmesg restriction, disabled unprivileged eBPF and io_uring, sync-only SysRq, and IPv6 router advertisement rejection.
-
-### Authentication and PAM
-faillock lockout protection enforcing 5 attempts per 900 seconds, strict pwquality rules, access list controls, and disabled core dumps.
-
-### SSH Hardening
-Root login disabled, password authentication disabled, strict modern ciphers, and systemd service sandboxing.
-
-### Sandboxing and MAC
-AppArmor enforcement profiles for sshd, useradd, curl, and wget.
-
-### System Services
-Strict filesystem protections on sshd, unneeded services disabled, LLMNR and mDNS disabled, and NetworkManager preserved without interference.
-
-### Desktop Cleanup
-Removal of default Omarchy webapp shortcuts and restoration of the Yaru icon theme with per-theme folder color synchronization.
-
-### Security Tooling
-Integrated auditd, fail2ban, usbguard, clamav, lynis, and rkhunter with weekly automated audits.
+## Desktop Parity and Debloat Strategy
+Omarchy desktop theming automatically synchronizes Yaru folder colors to match the active theme palette via GSettings. The pipeline debloats unneeded default packages including Chromium, Neovim, MPV, Kdenlive, OBS Studio, LibreOffice, and Obsidian, replacing them with lightweight native defaults such as Micro and Brave. To guarantee persistence across future system updates, debloated packages are pinned in `/etc/pacman.conf` under `IgnorePkg`, and obsolete web application shortcuts are cleaned from system application directories.

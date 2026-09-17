@@ -7,24 +7,13 @@ description: >-
 # AppArmor Management
 
 ## Overview
-This skill covers profile lifecycle management, enforcement verification, and log auditing for AppArmor profiles protecting system utilities and services.
+This skill covers profile lifecycle management, enforcement verification, and log auditing for AppArmor mandatory access control profiles protecting system utilities and services.
 
-## Profile Locations
-* Active profiles reside in `/etc/apparmor.d/`.
-* Profiles managed in omasec include `sshd`, `useradd`, `curl`, and `wget`.
+## Profile Locations and Target Binaries
+Active AppArmor profiles reside in `/etc/apparmor.d/`. Dedicated security profiles managed in omasec enforce confinement rules on sshd, useradd, curl, and wget.
 
-## Profile Operations
+## Status Verification and Mode Control
+Enforcement status across loaded profiles is checked using the `aa-status` utility or by querying the `/sys/kernel/security/apparmor/profiles` pseudo-filesystem. Individual profiles are switched into enforce mode with `aa-enforce /etc/apparmor.d/<profile>` or complain mode with `aa-complain /etc/apparmor.d/<profile>`. Profile definitions are reloaded into the kernel with `apparmor_parser -r /etc/apparmor.d/<profile>`.
 
-### Check Enforcement Status
-1. Check overall status with `aa-status`.
-2. Verify specific profile enforcement state in `/sys/kernel/security/apparmor/profiles`.
-
-### Enforce or Complain
-1. Put profile in enforce mode with `aa-enforce /etc/apparmor.d/<profile_name>`.
-2. Put profile in complain mode with `aa-complain /etc/apparmor.d/<profile_name>`.
-3. Reload profiles with `apparmor_parser -r /etc/apparmor.d/<profile_name>`.
-
-### Auditing Denials
-1. Review kernel denial messages using `dmesg | grep -i apparmor`.
-2. Review audit logs using `ausearch -m avc -ts recent`.
-3. Generate profile adjustments if necessary using `aa-logprof`.
+## Audit Analysis and Profile Tuning
+AppArmor kernel denial logs are inspected using `dmesg | grep -i apparmor` or by querying audit logs with `ausearch -m avc -ts recent`. Profile refinements and rule additions are generated interactively from recorded audit events using `aa-logprof`.

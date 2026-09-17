@@ -7,26 +7,16 @@ description: >-
 # Omarchy Theming
 
 ## Overview
-This skill describes the architecture and execution of theme hooks that automatically map Omarchy desktop themes to corresponding Yaru folder colors.
+This skill describes the architecture and execution of desktop theme hooks that automatically synchronize Omarchy system themes with matching Yaru folder colors.
 
 ## Theme Hook Workflow
-The theme hook is located at `hooks/theme-set.d/folder-color` and installs to `~/.config/omarchy/hooks/theme-set.d/folder-color`.
+The core theme hook implementation resides in `hooks/theme-set.d/folder-color` within the repository. The hook is deployed to user configurations by copying it into `~/.config/omarchy/hooks/theme-set.d/folder-color` with executable permissions, allowing Omarchy theme switching events to trigger it automatically.
 
-## Execution
-* Run `make hook` to install the hook to user configuration.
-* Run `make icons` to execute the folder color updater for the active theme.
+## Execution and Testing
+Installing the user hook is executed via `make hook`. Testing or reapplying icon colors for the active desktop theme is executed via `make icons` or by executing `bash hooks/theme-set.d/folder-color` directly in user space.
 
-## Theme to Color Mapping
-* `everforest` -> `sage`
-* `gruvbox` -> `yellow`
-* `nord` -> `blue`
-* `tokyo-night` -> `purple`
-* `catppuccin` -> `magenta`
-* `dracula` -> `purple`
-* `rose-pine` -> `pink`
-* `solarized-dark` / `solarized-light` -> `cyan`
-* `default` -> `orange`
+## Theme Palette Mapping
+The hook maps Omarchy desktop themes to specific Yaru icon palette variants. Themes `everforest` maps to `sage`, `gruvbox` maps to `yellow`, `nord` maps to `blue`, `tokyo-night` and `dracula` map to `purple`, `catppuccin` maps to `magenta`, `rose-pine` maps to `pink`, `solarized-dark` and `solarized-light` map to `cyan`, and `default` or unrecognized themes fallback to `orange`.
 
-## GSettings Integration
-The hook applies the icon theme using:
-`gsettings set org.gnome.desktop.interface icon-theme "Yaru-<color>"`
+## GSettings Propagation
+Icon theme changes are applied directly to the GNOME desktop interface schema by invoking `gsettings set org.gnome.desktop.interface icon-theme "Yaru-<color>"` within the active user session.

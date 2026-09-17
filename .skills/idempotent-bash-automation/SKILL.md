@@ -7,16 +7,13 @@ description: >-
 # Idempotent Bash Automation
 
 ## Overview
-This skill defines standards for writing system administration scripts and test suites for the omasec project.
+This skill defines standards and procedures for authoring safe, predictable, and idempotent Bash administration scripts, testing harnesses, and verification suites within omasec.
 
-## Scripting Guidelines
-* Always run with strict shell flags: `set -euo pipefail`.
-* Never use `|| true` to silence failures.
-* Use `|| warn "message"` for non-critical steps that are permitted to fail gracefully.
-* Do not use `systemd-run` or background execution; all operations must execute in the foreground.
-* Derive paths dynamically using `$HOME` or `/home/*` rather than hardcoding user paths.
-* Ensure all actions are idempotent so multiple runs produce identical system states.
+## Native Scripting Standards
+Scripts must use strict shell flags `set -euo pipefail` without Python runtimes or external script dependencies. Never use `|| true` to suppress return codes. Use `|| warn "message"` exclusively for non-critical steps that are intentionally permitted to continue upon failure. Avoid background execution or `systemd-run`; all automation steps must run synchronously in the foreground with direct stdout logging. User paths must never be hardcoded and must be derived dynamically from `$HOME` or `/home/*`.
 
-## Verification Suite Standards
-* Run verification with `bash scripts/verify.sh` or `make verify`.
-* Use test counters (`PASS`, `FAIL`) and assert exit code 0 only when `FAIL` is 0.
+## Idempotency and State Management
+Every script operation must verify the current system state prior to making mutations. Operations modifying configuration files such as `/etc/pacman.conf` or PAM files must detect existing directives to avoid creating duplicate configuration entries. Multiple successive executions of any script must result in an identical, stable system configuration.
+
+## Verification and Testing
+Automated verification assertions are implemented in `scripts/verify.sh` and compatibility tests are executed in `scripts/test-omarchy-compat.sh`. Verification scripts maintain explicit pass and fail counters and return a non-zero exit code whenever any failure condition is encountered.

@@ -1,46 +1,13 @@
 # zedconf
 
-Pure code Zed editor setup for omarchy.
+Native Zed editor configuration installer for Omarchy desktop.
 
-## Install
+## Overview
+zedconf installs customized configuration files, themes, keymaps, and code runners into the Zed editor configuration directory. All installations are performed using native Bash automation and standard Unix utilities without Python dependencies or virtual environments.
 
-```bash
-sudo pacman -S --needed base-devel git wget
-python -m venv .venv
-source .venv/bin/activate
-pip install -e .
-zedconf install
-```
+## Installation
+Execute the native installation script in the user environment to copy and merge settings into the XDG configuration path:
+`bash zedconf/install.sh`
 
-## Features
-
-- Configures Zed editor with Catppuccin Mocha theme
-- Sets up proper keybindings and runners
-- Integrates with omarchy theming system
-- Creates Zed configuration files in the correct location
-
-## Configuration
-
-The configuration is split into:
-- Base settings in `zedconf/data/settings.json`
-- Linux overrides in `zedconf/data/linux/settings.json`
-- Keybindings in `zedconf/data/keybindings.json`
-- Runners in `zedconf/data/runners.json`
-- Snippets in `zedconf/data/snippets/`
-
-## Development
-
-```bash
-# Install dev dependencies
-pip install -e .[dev]
-
-# Run tests
-pytest
-
-# Format code
-ruff check .
-ruff format .
-
-# Type check
-mypy .
-```
+## Configuration Architecture
+Base editor preferences reside in `data/settings.json` while platform overrides reside in `data/linux/settings.json`. Custom key mappings are stored in `data/keybindings.json` and code snippets reside in `data/snippets/`. The installer creates automatic timestamps backups before writing new configurations into `~/.config/zed/`.

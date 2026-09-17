@@ -7,31 +7,16 @@ description: >-
 # Security Audit Tooling
 
 ## Overview
-This skill outlines how to maintain and verify host-based intrusion detection, device authorization, malware scanning, and security audit systems.
+This skill outlines how to maintain, configure, and verify host-based intrusion detection, peripheral device authorization, malware scanning, and automated system security audits on Arch Linux.
 
-## Security Components
+## Audit Framework Management
+The Linux Audit daemon is configured through `/etc/audit/auditd.conf` while granular kernel audit rules reside in `/etc/audit/rules.d/`. Audit event logs are queried using `ausearch` and aggregated summary reports are generated using `aureport`. Daemon operational state is checked via `systemctl status auditd.service`.
 
-### Auditd
-1. Configuration resides in `/etc/audit/auditd.conf` and rules in `/etc/audit/rules.d/`.
-2. Inspect audit events using `ausearch` and `aureport`.
-3. Check daemon status with `systemctl status auditd.service`.
+## Intrusion Prevention with Fail2ban
+Intrusion detection parameters are configured in `/etc/fail2ban/jail.local`. Active jails are monitored using `fail2ban-client status`, while banned IP addresses for specific services are reviewed with `fail2ban-client status sshd`.
 
-### Fail2ban
-1. Configuration resides in `/etc/fail2ban/jail.local`.
-2. Inspect active jails using `fail2ban-client status`.
-3. Check banned IPs using `fail2ban-client status sshd`.
+## USB Device Authorization
+Peripheral device authorization is enforced through the policy configuration file `/etc/usbguard/rules.conf`. The daemon blocks unauthorized USB storage and rogue devices while allowing recognized human interface input devices such as keyboards and mice. Connected USB hardware states are inspected using `usbguard list-devices`.
 
-### USBGuard
-1. Policy resides in `/etc/usbguard/rules.conf`.
-2. Block unauthorized USB devices while permitting existing authorized peripherals.
-3. Query connected devices using `usbguard list-devices`.
-
-### ClamAV
-1. Freshclam database updates are managed via `freshclam.service`.
-2. ClamAV daemon is managed via `clamav-daemon.service`.
-3. Run on-demand scan using `clamscan -r -i /home`.
-
-### Lynis and Rkhunter Audits
-1. Automated weekly audit script is placed in `/etc/cron.weekly/security-audit.sh`.
-2. Run manual Lynis system scan using `lynis audit system`.
-3. Run manual rootkit check using `rkhunter --check --sk`.
+## Antivirus and Security Audits
+ClamAV signature updates run continuously via `freshclam.service` and the virus scanning engine runs under `clamav-daemon.service`. Manual directory scans are launched with `clamscan -r -i /home`. Comprehensive system auditing is scheduled weekly via `/etc/cron.weekly/security-audit.sh`. Manual audit reports are generated using `lynis audit system` and rootkit integrity checks are run with `rkhunter --check --sk`.
