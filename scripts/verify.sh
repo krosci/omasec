@@ -2,6 +2,8 @@
 
 set -uo pipefail
 
+SCRIPT_DIR="$(dirname "$(readlink -f "$0")")"
+
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 BOLD='\033[1m'

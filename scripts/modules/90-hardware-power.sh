@@ -3,6 +3,7 @@ set -euo pipefail
 
 log "Enforcing battery charge threshold policy"
 mkdir -p /etc/omasec
+chmod 755 /etc/omasec 2>/dev/null || warn "/etc/omasec chmod skipped"
 cat > /etc/omasec/power.conf << 'POWER'
 BATTERY_CHARGE_LIMIT=75
 POWER
