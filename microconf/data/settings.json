@@ -15,7 +15,7 @@
     "savecursor": true,
     "savehistory": true,
     "saveundo": true,
-    "scrollbar": true,
+    "scrollbar": false,
     "smartpaste": true,
     "softwrap": true,
     "statusformatl": "$(filename) $(modified)($(line),$(col))",
