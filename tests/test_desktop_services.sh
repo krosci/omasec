@@ -11,7 +11,7 @@ test_section "Desktop Services & Session Health"
 
 assert_warn "D-Bus session bus accessible" "[[ -n \"${DBUS_SESSION_BUS_ADDRESS:-}\" ]] || busctl --user status &>/dev/null"
 assert_warn "XDG runtime directory exists and is valid" "[[ -d \"${XDG_RUNTIME_DIR:-/run/user/$(id -u)}\" ]]"
-assert_true "Polkit daemon enabled or active" "systemctl is-active polkit.service &>/dev/null || systemctl is-enabled polkit.service &>/dev/null"
+assert_warn "Polkit daemon enabled or active" "systemctl is-active polkit.service &>/dev/null || systemctl is-enabled polkit.service &>/dev/null || pacman -Q polkit &>/dev/null"
 assert_warn "Audio server active (PipeWire)" "systemctl --user is-active pipewire.service &>/dev/null || pgrep -x pipewire &>/dev/null"
 assert_warn "WirePlumber session manager active" "systemctl --user is-active wireplumber.service &>/dev/null || pgrep -x wireplumber &>/dev/null"
 

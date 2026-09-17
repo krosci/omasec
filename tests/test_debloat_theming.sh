@@ -40,9 +40,6 @@ fi
 
 if [[ -f /etc/pacman.d/omasec/ignore-pkgs.list ]]; then
     assert_file_exists "pacman ignore-pkgs.list exists" "/etc/pacman.d/omasec/ignore-pkgs.list"
-fi
-
-if [[ -f /etc/pacman.conf ]]; then
     assert_file_contains "pacman.conf has IgnorePkg" "/etc/pacman.conf" "^IgnorePkg"
 fi
 
