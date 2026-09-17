@@ -5,7 +5,7 @@ SHELL := /bin/bash
 help:
 	@echo "setup       Run full setup (root)"
 	@echo "verify      Run verification checks"
-	@echo "test        Run Omarchy compatibility tests"
+	@echo "test        Run comprehensive test suites"
 	@echo "hook        Install folder-color hook for current user"
 	@echo "icons       Apply folder color for current theme"
 	@echo "clean       Remove setup log"
@@ -17,7 +17,7 @@ verify:
 	bash scripts/verify.sh
 
 test:
-	bash scripts/test-omarchy-compat.sh
+	bash tests/run-all.sh
 
 hook:
 	@mkdir -p ~/.config/omarchy/hooks/theme-set.d
