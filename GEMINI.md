@@ -6,16 +6,18 @@ omasec is an Arch Linux security hardening, debloat, and theming automation suit
 ## Repository Architecture
 * `scripts/setup.sh` executes the full system hardening, package provisioning, and debloat pipeline as root.
 * `scripts/verify.sh` executes automated assertion checks on kernel sysctl parameters, PAM configs, firewall state, packages, and services.
+* `scripts/test-omarchy-compat.sh` executes deep compatibility assertions ensuring Omarchy desktop components, hooks, permissions, audio, D-Bus, and network are intact.
 * `scripts/run-setup.sh` runs setup with stdout redirection and logging.
 * `scripts/launch.sh` launches an interactive terminal execution session.
 * `hooks/theme-set.d/folder-color` integrates with Omarchy theme-set events to apply matching Yaru folder colors via gsettings.
 * `zedconf/` contains configuration settings, keybindings, and language configurations for the Zed editor.
-* `Makefile` exposes standard developer targets: `setup`, `verify`, `hook`, `icons`, `clean`.
+* `Makefile` exposes standard developer targets: `setup`, `verify`, `test`, `hook`, `icons`, `clean`.
 * `.skills/` contains workspace operational skills.
 
 ## Operational Commands
 * Full setup: `make setup` runs `sudo bash scripts/setup.sh`.
 * System verification: `make verify` runs `bash scripts/verify.sh`.
+* Compatibility test suite: `make test` runs `bash scripts/test-omarchy-compat.sh`.
 * Install user hook: `make hook` copies `hooks/theme-set.d/folder-color` to `~/.config/omarchy/hooks/theme-set.d/`.
 * Apply theme icons: `make icons` executes `hooks/theme-set.d/folder-color`.
 * Clean logs: `make clean` deletes `setup.log`.

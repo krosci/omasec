@@ -6,7 +6,7 @@ Arch Linux security hardening, debloat, and theming pipeline for Omarchy.
 omasec automates system-level security hardening, deployment of security tooling, unneeded package debloating, and desktop theming integrations for Omarchy.
 
 ## Repository Structure
-* `scripts/`: System setup, verification, and launch execution scripts.
+* `scripts/`: System setup, verification, compatibility testing, and launch execution scripts.
 * `hooks/`: Omarchy hook extensions for theme and folder color integration.
 * `zedconf/`: Configuration files for the Zed code editor.
 * `.skills/`: Operational skill runbooks for workspace workflows.
@@ -23,6 +23,10 @@ Execute the complete security hardening and provisioning pipeline as root:
 ### Verify System State
 Run the verification suite to assert that all security settings, services, and kernel parameters are correctly applied:
 `make verify`
+
+### Compatibility Testing
+Run the Omarchy integrity and compatibility test suite:
+`make test`
 
 ### Desktop Theming
 Install and trigger the per-theme folder color hook for the current user:
