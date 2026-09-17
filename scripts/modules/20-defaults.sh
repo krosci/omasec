@@ -19,13 +19,16 @@ if ! pacman -Q micro &>/dev/null; then
     pacman -S --noconfirm --needed micro
 fi
 
-log "Setting default editor to micro"
+log "Setting default editor to micro and provisioning microconf"
 for user_home in /home/*; do
     [[ -d "$user_home" ]] || continue
     _user=$(basename "$user_home")
     mkdir -p "$user_home/.local/state/omarchy/defaults"
     printf 'micro\n' > "$user_home/.local/state/omarchy/defaults/editor"
     chown -R "$_user":"$_user" "$user_home/.local/state" 2>/dev/null || warn "chown state failed for $_user"
+    if [[ -x "$PROJECT_DIR/microconf/install.sh" ]]; then
+        sudo -u "$_user" bash "$PROJECT_DIR/microconf/install.sh" 2>/dev/null || warn "microconf install skipped for $_user"
+    fi
 done
 
 log "Installing totem (GNOME Videos)"

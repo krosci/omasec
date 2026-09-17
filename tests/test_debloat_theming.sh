@@ -54,6 +54,11 @@ MICRO_HOOK="$PROJECT_DIR/hooks/theme-set.d/micro-theme"
 assert_file_exists "micro-theme hook exists in repo" "$MICRO_HOOK"
 assert_file_executable "micro-theme hook executable" "$MICRO_HOOK"
 
+assert_file_exists "zedconf install script exists" "$PROJECT_DIR/zedconf/install.sh"
+assert_file_exists "microconf install script exists" "$PROJECT_DIR/microconf/install.sh"
+assert_file_exists "microconf settings exists" "$PROJECT_DIR/microconf/data/settings.json"
+assert_file_exists "microconf bindings exists" "$PROJECT_DIR/microconf/data/bindings.json"
+
 test_theme_mapping() {
     local theme="$1" expected="$2"
     local mapped

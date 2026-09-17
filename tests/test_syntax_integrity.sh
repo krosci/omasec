@@ -9,7 +9,7 @@ source "$SCRIPT_DIR/test_lib.sh"
 
 test_section "Script Syntax & Code Integrity"
 
-for sh_file in "$PROJECT_DIR"/scripts/*.sh "$PROJECT_DIR"/scripts/modules/*.sh "$PROJECT_DIR"/hooks/theme-set.d/* "$PROJECT_DIR"/zedconf/*.sh "$PROJECT_DIR"/tests/*.sh; do
+for sh_file in "$PROJECT_DIR"/scripts/*.sh "$PROJECT_DIR"/scripts/modules/*.sh "$PROJECT_DIR"/hooks/theme-set.d/* "$PROJECT_DIR"/zedconf/*.sh "$PROJECT_DIR"/microconf/*.sh "$PROJECT_DIR"/tests/*.sh; do
     [[ -f "$sh_file" ]] || continue
     fname=$(basename "$sh_file")
     assert_true "syntax check: $fname" "bash -n '$sh_file'"
@@ -22,6 +22,7 @@ assert_file_executable "scripts/run-setup.sh is executable" "$PROJECT_DIR/script
 assert_file_executable "hooks/theme-set.d/folder-color is executable" "$PROJECT_DIR/hooks/theme-set.d/folder-color"
 assert_file_executable "hooks/theme-set.d/micro-theme is executable" "$PROJECT_DIR/hooks/theme-set.d/micro-theme"
 assert_file_executable "zedconf/install.sh is executable" "$PROJECT_DIR/zedconf/install.sh"
+assert_file_executable "microconf/install.sh is executable" "$PROJECT_DIR/microconf/install.sh"
 
 for mod in "$PROJECT_DIR"/scripts/modules/*.sh; do
     [[ -f "$mod" ]] || continue
