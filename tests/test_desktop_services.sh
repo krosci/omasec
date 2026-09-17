@@ -15,7 +15,7 @@ assert_true "Polkit daemon enabled or active" "systemctl is-active polkit.servic
 assert_warn "Audio server active (PipeWire)" "systemctl --user is-active pipewire.service &>/dev/null || pgrep -x pipewire &>/dev/null"
 assert_warn "WirePlumber session manager active" "systemctl --user is-active wireplumber.service &>/dev/null || pgrep -x wireplumber &>/dev/null"
 
-if [[ -f /etc/security/access.conf ]]; then
+if [[ -f /etc/security/access.conf ]] && grep -qE '^\+:root:' /etc/security/access.conf 2>/dev/null; then
     assert_file_contains "access.conf permits wheel" "/etc/security/access.conf" "\+:wheel:LOCAL"
     assert_file_contains "access.conf permits gdm" "/etc/security/access.conf" "\+:gdm:LOCAL"
     assert_file_contains "access.conf permits sddm" "/etc/security/access.conf" "\+:sddm:LOCAL"

@@ -14,7 +14,11 @@ for user_home in /home/*; do
             rm -f "$override" || warn "removing Tela override failed for $slug/$_user"
         fi
     done
-    _theme_name=$(cat "$user_home/.local/state/omarchy/current/theme.name" 2>/dev/null | tr '[:upper:]' '[:lower:]' | tr ' ' '-')
+    if [[ -f "$user_home/.local/state/omarchy/current/theme.name" ]]; then
+        _theme_name=$(tr '[:upper:]' '[:lower:]' < "$user_home/.local/state/omarchy/current/theme.name" | tr ' ' '-')
+    else
+        _theme_name="default"
+    fi
     _yaru_variant=$(
         case "$_theme_name" in
             catppuccin)        echo "Yaru-blue-dark" ;;

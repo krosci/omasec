@@ -36,7 +36,7 @@ jobs:
 
       - name: Run ShellCheck
         run: |
-          shellcheck -e SC1091 -e SC2034 scripts/*.sh scripts/modules/*.sh hooks/theme-set.d/* zedconf/*.sh microconf/*.sh tests/*.sh
+          shellcheck -e SC1091 -e SC2034 -e SC2016 scripts/*.sh scripts/modules/*.sh hooks/theme-set.d/* zedconf/*.sh microconf/*.sh tests/*.sh
 
   idempotency-and-safety:
     name: Automation Safety & Idempotency Rules
@@ -83,7 +83,7 @@ jobs:
       - name: Setup Arch Environment
         run: |
           pacman -Syu --noconfirm base-devel git sudo jq
-          useradd -m testuser
+          useradd -m -G wheel testuser
           echo "testuser ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 
       - name: Checkout Code

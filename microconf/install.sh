@@ -15,8 +15,12 @@ if [[ -f "$CONFIG_DIR/bindings.json" ]]; then
 fi
 
 if command -v jq &>/dev/null && [[ -f "$CONFIG_DIR/settings.json" ]] && [[ -s "$CONFIG_DIR/settings.json" ]]; then
-    jq -s '.[0] * .[1]' "$CONFIG_DIR/settings.json" "$SCRIPT_DIR/data/settings.json" > "$CONFIG_DIR/settings.json.tmp" 2>/dev/null && \
-    mv "$CONFIG_DIR/settings.json.tmp" "$CONFIG_DIR/settings.json" || cp "$SCRIPT_DIR/data/settings.json" "$CONFIG_DIR/settings.json"
+    if jq -s '.[0] * .[1]' "$CONFIG_DIR/settings.json" "$SCRIPT_DIR/data/settings.json" > "$CONFIG_DIR/settings.json.tmp" 2>/dev/null; then
+        mv "$CONFIG_DIR/settings.json.tmp" "$CONFIG_DIR/settings.json"
+    else
+        rm -f "$CONFIG_DIR/settings.json.tmp"
+        cp "$SCRIPT_DIR/data/settings.json" "$CONFIG_DIR/settings.json"
+    fi
 else
     cp "$SCRIPT_DIR/data/settings.json" "$CONFIG_DIR/settings.json"
 fi

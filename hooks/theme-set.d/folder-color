@@ -3,7 +3,11 @@ set -euo pipefail
 
 warn() { echo "warning: $1" >&2; }
 
-CURRENT_THEME=$(cat "$HOME/.local/state/omarchy/current/theme.name" 2>/dev/null | tr '[:upper:]' '[:lower:]' | tr ' ' '-')
+if [[ -f "$HOME/.local/state/omarchy/current/theme.name" ]]; then
+    CURRENT_THEME=$(tr '[:upper:]' '[:lower:]' < "$HOME/.local/state/omarchy/current/theme.name" | tr ' ' '-')
+else
+    CURRENT_THEME=""
+fi
 [[ -n "$CURRENT_THEME" ]] || exit 0
 
 case "$CURRENT_THEME" in

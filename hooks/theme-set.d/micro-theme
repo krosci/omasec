@@ -3,7 +3,11 @@ set -euo pipefail
 
 warn() { echo "warning: $1" >&2; }
 
-CURRENT_THEME=$(cat "$HOME/.local/state/omarchy/current/theme.name" 2>/dev/null | tr '[:upper:]' '[:lower:]' | tr ' ' '-')
+if [[ -f "$HOME/.local/state/omarchy/current/theme.name" ]]; then
+    CURRENT_THEME=$(tr '[:upper:]' '[:lower:]' < "$HOME/.local/state/omarchy/current/theme.name" | tr ' ' '-')
+else
+    CURRENT_THEME="default"
+fi
 [[ -n "$CURRENT_THEME" ]] || CURRENT_THEME="default"
 
 MICRO_CONFIG="${XDG_CONFIG_HOME:-$HOME/.config}/micro"
@@ -99,7 +103,11 @@ fi
 if [[ -f "$SETTINGS_FILE" ]] && [[ -s "$SETTINGS_FILE" ]]; then
     if command -v jq &>/dev/null; then
         tmp_json=$(mktemp)
-        jq '.colorscheme = "omarchy"' "$SETTINGS_FILE" > "$tmp_json" 2>/dev/null && mv "$tmp_json" "$SETTINGS_FILE" || rm -f "$tmp_json"
+        if jq '.colorscheme = "omarchy"' "$SETTINGS_FILE" > "$tmp_json" 2>/dev/null; then
+            mv "$tmp_json" "$SETTINGS_FILE"
+        else
+            rm -f "$tmp_json"
+        fi
     elif grep -q '"colorscheme"' "$SETTINGS_FILE" 2>/dev/null; then
         sed -i 's/"colorscheme"[[:space:]]*:[[:space:]]*"[^"]*"/"colorscheme": "omarchy"/' "$SETTINGS_FILE"
     else

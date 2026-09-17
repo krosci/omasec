@@ -164,9 +164,8 @@ check "micro colorscheme exists" "[[ -f $HOME/.config/micro/colorschemes/omarchy
 check "yaru-icon-theme present"  "pacman -Q yaru-icon-theme &>/dev/null"
 
 section "AUR integrity"
-SCRIPT_DIR="$(dirname "$(readlink -f "$0")")"
-check "no unverified AUR"  "! grep -q 'aur_install ' "$SCRIPT_DIR/setup.sh""
-check "no yay fallback"    "! grep -q 'yay -S' "$SCRIPT_DIR/setup.sh""
+check "no unverified AUR" "! grep -q 'aur_install ' '$SCRIPT_DIR/setup.sh'"
+check "no yay fallback"   "! grep -q 'yay -S' '$SCRIPT_DIR/setup.sh'"
 
 echo ""
 echo -e "${BOLD}Passed: $PASS  Failed: $FAIL${NC}"

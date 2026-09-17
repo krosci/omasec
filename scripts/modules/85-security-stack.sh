@@ -42,7 +42,9 @@ cat > /etc/audit/rules.d/hardened.rules << 'AUDIT'
 -a always,exit -F arch=b64 -S mount -k mount
 -a always,exit -F arch=b32 -S mount -k mount
 AUDIT
-systemctl list-unit-files auditd.service &>/dev/null && systemctl enable auditd.service || warn "auditd enable skipped"
+if systemctl list-unit-files auditd.service &>/dev/null; then
+    systemctl enable auditd.service || warn "auditd enable skipped"
+fi
 systemctl restart auditd.service 2>/dev/null || warn "auditd restart skipped"
 auditctl -R /etc/audit/rules.d/hardened.rules 2>/dev/null || warn "auditctl load skipped"
 

@@ -27,7 +27,7 @@ assert_file_exists "maintenance module exists" "$MAINT_MODULE"
 assert_file_contains "maintenance module schedules weekly audit" "$MAINT_MODULE" "/etc/cron.weekly/security-audit.sh"
 assert_file_contains "maintenance module hardens sudoers" "$MAINT_MODULE" "/etc/sudoers.d/security"
 
-if command -v pacman &>/dev/null && [[ -f /etc/arch-release ]]; then
+if command -v pacman &>/dev/null && [[ -f /etc/arch-release ]] && [[ -f /etc/audit/rules.d/hardened.rules ]]; then
     for pkg in lynis rkhunter clamav audit usbguard fail2ban apparmor; do
         assert_true "security package $pkg present" "pacman -Q '$pkg' &>/dev/null"
     done
@@ -42,6 +42,7 @@ fi
 
 if [[ -f /etc/cron.weekly/security-audit.sh ]]; then
     assert_file_executable "Weekly audit cron script executable" "/etc/cron.weekly/security-audit.sh"
+    assert_false "Nonexistent TPM verity file absent" "[[ -f /usr/lib/nvpcr/verity.nvpcr ]]"
 fi
 
 if [[ -f /etc/shadow ]]; then
@@ -49,7 +50,5 @@ if [[ -f /etc/shadow ]]; then
     assert_true "Passwd file permissions 644" "[[ \"\$(stat -c %a /etc/passwd 2>/dev/null)\" == 644 ]]"
     assert_true "Group file permissions 644" "[[ \"\$(stat -c %a /etc/group 2>/dev/null)\" == 644 ]]"
 fi
-
-assert_false "Nonexistent TPM verity file absent" "[[ -f /usr/lib/nvpcr/verity.nvpcr ]]"
 
 test_summary

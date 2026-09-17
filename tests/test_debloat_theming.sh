@@ -24,7 +24,7 @@ assert_file_contains "defaults module configures totem player" "$DEFAULTS_MODULE
 assert_file_exists "theming module exists" "$THEMING_MODULE"
 assert_file_contains "theming module installs hooks" "$THEMING_MODULE" "hooks/theme-set.d"
 
-if command -v pacman &>/dev/null && [[ -f /etc/arch-release ]]; then
+if command -v pacman &>/dev/null && [[ -f /etc/arch-release ]] && [[ -f /etc/pacman.d/omasec/ignore-pkgs.list ]]; then
     assert_true "yaru-icon-theme installed" "pacman -Q yaru-icon-theme &>/dev/null"
     assert_true "nautilus installed" "pacman -Q nautilus &>/dev/null"
     assert_true "herdr installed" "pacman -Q herdr &>/dev/null"

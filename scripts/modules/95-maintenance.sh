@@ -87,8 +87,10 @@ for u_home in /home/*; do
 done
 
 log "Cleaning orphaned packages"
-orphans=$(pacman -Qdtq 2>/dev/null) || warn "no orphans found"
-[[ -n "$orphans" ]] && pacman -Rns --noconfirm $orphans 2>/dev/null || warn "orphan cleanup skipped"
+mapfile -t orphans < <(pacman -Qdtq 2>/dev/null || :)
+if [[ ${#orphans[@]} -gt 0 && -n "${orphans[0]}" ]]; then
+    pacman -Rns --noconfirm "${orphans[@]}" 2>/dev/null || warn "orphan cleanup skipped"
+fi
 
 log "Clearing package cache"
 yes | pacman -Scc 2>/dev/null || warn "package cache clear skipped"
